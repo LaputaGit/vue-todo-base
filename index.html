@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>基于vue的todo案例</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div class="page-top">
+        <div class="page-content">
+            <h2>任务计划列表</h2>
+        </div>
+    </div>
+    <div class="main">
+        <h3 class="big-title">添加任务：</h3>
+        <input type="text"
+               class="task-input"
+               v-model="addTodoText"
+               @keyup.enter="addTodo"
+               placeholder="    +回车即可添加任务"
+        >
+        <ul class="task-count" v-if="lists.length">
+            <li>
+                <!--{{
+                    lists.filter(function(item){
+                        return !item.changeCheck
+                    }).length
+                }}-->
+
+                {{counter}}
+                个任务未完成
+            </li>
+            <li class="action">
+                <a href="#all">所有任务</a>
+                <a href="#undone">未完成的任务</a>
+                <a href="#done">完成的任务</a>
+            </li>
+        </ul>
+        <h3 class="big-title">任务列表：</h3>
+        <div class="tasks">
+            <span class="no-task-tip" v-if="!lists.length">还没有添加任何任务</span>
+            <ul class="todo-list">
+                <li class="todo"
+                    v-for="item of filterList"
+                    :class="{
+                    completed: item.changeCheck,
+                    editing: item == editorTodo
+                    }"
+                >
+                    <div class="view">
+                        <input type="checkbox" class="toggle"
+                               v-model="item.changeCheck"
+                        >
+                        <label @dblclick="editTodo(item)" for="">{{item.text}}</label>
+                        <button class="destroy" @click="delTodo(item)"></button>
+                    </div>
+                    <input type="text" class="edit"
+                           v-model="item.text"
+                           @keyup.enter="enterTodo(item)"
+                           @blur="enterTodo(item)"
+                           @keyup.esc="cancelEdit(item)"
+                           v-focus="item == editorTodo"
+                    >
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
